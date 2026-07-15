@@ -15,7 +15,7 @@ final class Login extends Component
 
     public function login()
     {
-        $this->validate();
+        // $this->validate();
         $this->form->authenticate();
 
         session()->regenerate();
