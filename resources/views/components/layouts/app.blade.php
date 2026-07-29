@@ -11,15 +11,14 @@
 </head>
 
 <body class="flex min-h-screen flex-col"> {{-- Add flex classes --}}
-
-    @include('partials.header')
+    <x-partials.header />
 
     {{-- Main content area --}}
     <main class="flex-1"> {{-- This fills remaining space --}}
         {{ $slot }}
     </main>
 
-    @include('partials.footer')
+    <x-partials.footer />
 
     @livewireScripts    
      <script>

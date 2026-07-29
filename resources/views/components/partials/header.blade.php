@@ -41,10 +41,10 @@
 
             @guest
                 @if (request()->routeIs('register'))
-                    <x-ui.button size="sm" variant="outline" wire:navigate href="{{ route('login') }}">Log in
+                    <x-ui.button size="sm" variant="outline" href="{{ route('login') }}">Log in
                         </x-ui.button>
                 @else
-                    <x-ui.button size="sm" variant="outline" wire:navigate href="{{ route('register') }}">Register
+                    <x-ui.button size="sm" variant="outline" href="{{ route('register') }}">Register
                         </x-ui.button>
                 @endif
             @endguest
