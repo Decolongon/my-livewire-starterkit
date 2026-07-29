@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
-        this->blazeConfig();
+        $this->blazeConfig();
     }
 
     protected function configureRateLimiting(): void
