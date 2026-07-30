@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,18 +22,9 @@ class RegisterController extends Controller
             'captcha' => captcha_img('flat'),
         ]);
     }
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email|lowercase',
-            'password' => 'required|min:8|confirmed',
-            'captcha'  => 'required|captcha',
-            'password_confirmation' => 'required|same:password',
-        ], [
-            'captcha.required' => 'Enter the CAPTCHA',
-            'captcha.captcha' => 'CAPTCHA is incorrect',
-        ]);
+        $validated = $request->validated();
 
         $user =  User::create([
             'name' => $validated['name'],

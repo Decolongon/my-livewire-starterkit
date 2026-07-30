@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -21,17 +21,9 @@ class LoginController extends Controller
         ]);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-            'captcha'  => 'required|captcha',
-            'remember' => 'boolean',
-        ], [
-            'captcha.required' => 'Enter the CAPTCHA',
-            'captcha.captcha' => 'CAPTCHA is incorrect',
-        ]);
+        $request->validated();
 
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             $request->session()->regenerate();

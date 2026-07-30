@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Blaze\Blaze;
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configProhibitedCommand();
         $this->configureRateLimiting();
         $this->blazeConfig();
     }
@@ -31,10 +33,20 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
+    protected function configProhibitedCommand(): void
+    {
+        DB::prohibitDestructiveCommands(
+            app()->isProduction(),
+        );
+    }
+
     protected function blazeConfig(): void
     {
         Blaze::optimize()
             ->in(resource_path('views/components'))
-            ->in(resource_path('views/components/ui'), memo: false);
+            ->in(resource_path('views/components/ui'), memo: true)
+            ->in(resource_path('views/components/layouts'), fold: true)
+            ->in(resource_path('views/components/partials'), fold: true);
     }
+
 }
