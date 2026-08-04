@@ -43,10 +43,8 @@ class AppServiceProvider extends ServiceProvider
     protected function blazeConfig(): void
     {
         Blaze::optimize()
-            ->in(resource_path('views/components'))
-            ->in(resource_path('views/components/ui'), memo: true)
-            ->in(resource_path('views/components/layouts'), fold: true)
-            ->in(resource_path('views/components/partials'), fold: true);
+            ->in(resource_path('views/components/ui'),memo:true)
+            ->in(resource_path('views/components/partials'),compile:false);
+         
     }
-
 }

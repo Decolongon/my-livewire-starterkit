@@ -5,6 +5,13 @@
         ['label' => 'Status', 'route' => 'status'],
         ['label' => 'Blog', 'route' => 'blog'],
     ];
+
+    $user = auth()->user();
+    $nameParts = preg_split('/\s+/', trim((string) $user?->name));
+    $initials = mb_strtoupper(
+        mb_substr($nameParts[0] ?? '', 0, 1)
+        . (isset($nameParts[1]) ? mb_substr($nameParts[1], 0, 1) : '')
+    );
 @endphp
 
 <header class="bg-background/80 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur-xl">
@@ -50,7 +57,35 @@
             @endguest
 
             @auth
-                <livewire:auth.logout />
+                <div class="relative" x-data="{ open: false }">
+                    <button type="button" @click="open = !open" @keydown.escape.window="open = false"
+                        class="hover:bg-accent flex items-center gap-2 rounded-full p-1 pr-2 transition-colors"
+                        aria-label="Open profile menu" aria-haspopup="menu" :aria-expanded="open.toString()">
+                        <span
+                            class="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full text-sm font-semibold uppercase">
+                            {{ $initials }}
+                        </span>
+                        <span class="hidden text-sm font-medium sm:inline">{{ $user->name }}</span>
+                        <x-lucide-chevron-down class="text-muted-foreground hidden size-4 sm:block" />
+                    </button>
+
+                    <div x-show="open" @click.outside="open = false" x-cloak x-transition
+                        class="bg-card border-ring/40 absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border shadow-lg"
+                        role="menu">
+                        <div class="border-b px-4 py-3">
+                            <p class="text-sm font-semibold">{{ $user->name }}</p>
+                            <p class="text-muted-foreground truncate text-xs">{{ $user->email }}</p>
+                        </div>
+                        <div class="p-1.5">
+                            <a href="{{ route('profile') }}" wire:navigate role="menuitem"
+                                class="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors">
+                                <x-lucide-user class="text-muted-foreground size-4" /> Profile
+                            </a>
+                            <div class="my-1 h-px bg-border"></div>
+                            <livewire:auth.logout />
+                        </div>
+                    </div>
+                </div>
             @endauth
         </div>
     </div>
