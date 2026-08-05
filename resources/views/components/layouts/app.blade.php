@@ -17,10 +17,9 @@
     <main class="flex-1"> {{-- This fills remaining space --}}
         {{ $slot }}
     </main>
-
+    <x-ui.toast position="top-right" />
     <x-partials.footer />
-
-    @livewireScripts    
+    @livewireScripts   
      <script>
         const loadDarkMode = () => {
             const theme = localStorage.getItem('theme') ?? 'system';

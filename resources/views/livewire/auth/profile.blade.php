@@ -6,17 +6,6 @@
                 password.</x-ui.card-description>
         </x-ui.card-header>
 
-        @if (session()->has('success'))
-            <div class="px-6">
-                <p class="text-green-600 text-sm">{{ session('success') }}</p>
-            </div>
-        @endif
-        @if (session()->has('error'))
-            <div class="px-6">
-                <p class="text-red-600 text-sm">{{ session('error') }}</p>
-            </div>
-        @endif
-
         <x-ui.card-content>
             <form wire:submit="updateProfile" class="flex flex-col gap-6">
                 <x-ui.field>
