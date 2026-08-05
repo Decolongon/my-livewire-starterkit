@@ -3,8 +3,10 @@
 namespace App\Livewire\Auth;
 
 use App\Concerns\HasRateLimit;
+use App\Concerns\HasToast;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -12,7 +14,7 @@ use Livewire\Component;
 #[Title('Profile')]
 class Profile extends Component
 {
-    use HasRateLimit;
+    use HasRateLimit, HasToast;
 
     public $name = '';
 
@@ -25,6 +27,12 @@ class Profile extends Component
     public $current_password = '';
 
     public function mount()
+    {
+        $this->getNameEmail();
+    }
+
+    #[On('profile-updated')]
+    public function getNameEmail()
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
@@ -65,10 +73,10 @@ class Profile extends Component
 
             $user->save();
             $this->reset('new_password', 'new_password_confirmation', 'current_password');
-
-            session()->flash('success', 'Profile updated successfully.');
+            $this->dispatch('profile-updated')->to(self:true);
+            $this->toastSuccess('Profile updated successfully.');
         } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
+            $this->toastError($e->getMessage());
         }
     }
 
