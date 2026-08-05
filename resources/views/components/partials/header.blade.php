@@ -7,11 +7,6 @@
     ];
 
     $user = auth()->user();
-    $nameParts = preg_split('/\s+/', trim((string) $user?->name));
-    $initials = mb_strtoupper(
-        mb_substr($nameParts[0] ?? '', 0, 1)
-        . (isset($nameParts[1]) ? mb_substr($nameParts[1], 0, 1) : '')
-    );
 @endphp
 
 <header class="bg-background/80 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur-xl">
@@ -60,13 +55,13 @@
                 <div class="relative" x-data="{ open: false }">
                     <button type="button" @click="open = !open" @keydown.escape.window="open = false"
                         class="hover:bg-accent flex items-center gap-2 rounded-full p-1 pr-2 transition-colors"
-                        aria-label="Open profile menu" aria-haspopup="menu" :aria-expanded="open.toString()">
+                        aria-label="Open profile menu" aria-haspopup="menu" :aria-expanded="open.toString()" x-transition>
                         <span
                             class="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full text-sm font-semibold uppercase">
-                            {{ $initials }}
+                            {{ $user->initial() }}
                         </span>
-                        <span class="hidden text-sm font-medium sm:inline">{{ $user->name }}</span>
-                        <x-lucide-chevron-down class="text-muted-foreground hidden size-4 sm:block" />
+                        {{-- <span class="hidden text-sm font-medium sm:inline">{{ $user->name }}</span>
+                        <x-lucide-chevron-down class="text-muted-foreground hidden size-4 sm:block" /> --}}
                     </button>
 
                     <div x-show="open" @click.outside="open = false" x-cloak x-transition
