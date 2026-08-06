@@ -44,10 +44,10 @@
             @guest
                 @if (request()->routeIs('register'))
                     <x-ui.button size="sm" variant="outline" href="{{ route('login') }}">Log in
-                        </x-ui.button>
+                    </x-ui.button>
                 @else
                     <x-ui.button size="sm" variant="outline" href="{{ route('register') }}">Register
-                        </x-ui.button>
+                    </x-ui.button>
                 @endif
             @endguest
 
@@ -72,8 +72,18 @@
                             <p class="text-muted-foreground truncate text-xs">{{ $user->email }}</p>
                         </div>
                         <div class="p-1.5">
+                            <a href="{{ route('dashboard') }}" wire:navigate role="menuitem"
+                                @class([
+                                    'hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                                    'bg-accent text-foreground' => request()->routeIs('dashboard'),
+                                ])>
+                                <x-lucide-layout-dashboard class="text-muted-foreground size-4" /> Dashboard
+                            </a>
                             <a href="{{ route('profile') }}" wire:navigate role="menuitem"
-                                class="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors">
+                                @class([
+                                    'hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                                    'bg-accent text-foreground' => request()->routeIs('profile'),
+                                ])>
                                 <x-lucide-user class="text-muted-foreground size-4" /> Profile
                             </a>
                             <div class="my-1 h-px bg-border"></div>

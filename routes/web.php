@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Livewire\Auth\Profile;
+use App\Livewire\Pages\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,10 +21,6 @@ Route::middleware('throttle:authLimit')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
-    Route::get('/profile', Profile::class)->name('profile');
+    Route::livewire('/dashboard', Dashboard::class)->name('dashboard');
+    Route::livewire('/profile', Profile::class)->name('profile');
 });
