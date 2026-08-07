@@ -13,7 +13,7 @@ trait HasRateLimit
         return request()->user()?->id ?: request()->ip();
     }
 
-    protected function limitRate(int $maxAttempts = 3, int $decayMinutes = 1): bool
+    protected function limitRate(int $maxAttempts = 5, int $decayMinutes = 1): bool
     {
         if (RateLimiter::tooManyAttempts($this->getRateLimitKey(), $maxAttempts)) {
             // throw new \Exception('Too many attempts please try again later.');

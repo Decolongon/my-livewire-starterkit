@@ -28,6 +28,7 @@ class Profile extends Component
 
     public function mount()
     {
+
         $this->getNameEmail();
     }
 
