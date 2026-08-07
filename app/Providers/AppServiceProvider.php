@@ -29,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('authLimit', function (Request $request) {
-            return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+            return $request->user()
+                  ? Limit::perMinute(60)->by($request->user()->id)
+                  : Limit::perMinute(5)->by($request->ip());
         });
     }
 
@@ -43,8 +45,8 @@ class AppServiceProvider extends ServiceProvider
     protected function blazeConfig(): void
     {
         Blaze::optimize()
-            ->in(resource_path('views/components/ui'),memo:true)
-            ->in(resource_path('views/components/partials'),compile:false);
-         
+            ->in(resource_path('views/components/ui'), memo: true)
+            ->in(resource_path('views/components/partials'), compile: false);
+
     }
 }
