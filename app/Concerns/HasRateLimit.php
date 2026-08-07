@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\RateLimiter;
 
 trait HasRateLimit
 {
-    use HasToast;
 
     protected function getRateLimitKey(): string
     {

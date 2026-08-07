@@ -24,7 +24,7 @@
                     <x-ui.field>
                         <div class="flex items-center">
                             <x-ui.field-label for="password">Password</x-ui.field-label>
-                            <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+                            <a href="{{ route('password.request') }}" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
                         </div>
                         <x-ui.input id="password" name="password" type="password" />
                         @error('password')

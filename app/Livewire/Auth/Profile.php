@@ -12,7 +12,7 @@ use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Title('Profile')]
-class Profile extends Component
+final class Profile extends Component
 {
     use HasRateLimit, HasToast;
 
@@ -26,8 +26,13 @@ class Profile extends Component
 
     public $current_password = '';
 
+    public $confirm_password = '';
+
+    public bool $securityConfirmed = false;
+
     public function mount()
     {
+        $this->securityConfirmed = (bool) session('auth.password_confirmed_at');
 
         $this->getNameEmail();
     }
@@ -82,6 +87,18 @@ class Profile extends Component
         $this->dispatch('profile-updated')->to(self: true);
         $this->toastSuccess('Profile updated successfully.');
 
+    }
+
+    public function confirmSecurity()
+    {
+        $this->validate([
+            'confirm_password' => ['required', 'current_password:web'],
+        ]);
+
+        session(['auth.password_confirmed_at' => time()]);
+
+        $this->securityConfirmed = true;
+        $this->reset('confirm_password');
     }
 
     public function render()
