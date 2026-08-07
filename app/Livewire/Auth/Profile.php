@@ -42,11 +42,11 @@ class Profile extends Component
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,'.Auth::id()],
         ];
 
         if ($this->new_password || $this->current_password) {
-            $rules['current_password'] = ['required', 'current_password'];
+            $rules['current_password'] = ['required', 'current_password:web'];
             $rules['new_password'] = ['required', 'string', 'min:8', 'confirmed'];
         }
 
@@ -59,25 +59,28 @@ class Profile extends Component
 
     public function updateProfile()
     {
-        try {
-            $this->limitRate();
-            $validated = $this->validate();
 
-            $user = Auth::user();
-            $user->name = $validated['name'];
-            $user->email = $validated['email'];
+        $validated = $this->validate();
 
-            if (! empty($validated['new_password'])) {
-                $user->password = bcrypt($validated['new_password']);
-            }
+        if (! $this->limitRate()) {
+            $this->toastError('Too many attempts please try again later.');
 
-            $user->save();
-            $this->reset('new_password', 'new_password_confirmation', 'current_password');
-            $this->dispatch('profile-updated')->to(self:true);
-            $this->toastSuccess('Profile updated successfully.');
-        } catch (\Exception $e) {
-            $this->toastError($e->getMessage());
+            return;
         }
+
+        $user = Auth::user();
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (! empty($validated['new_password'])) {
+            $user->password = bcrypt($validated['new_password']);
+        }
+
+        $user->save();
+        $this->reset('new_password', 'new_password_confirmation', 'current_password');
+        $this->dispatch('profile-updated')->to(self: true);
+        $this->toastSuccess('Profile updated successfully.');
+
     }
 
     public function render()
